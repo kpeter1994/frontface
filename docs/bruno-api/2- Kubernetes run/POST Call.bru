@@ -1,0 +1,27 @@
+meta {
+  name: POST Call
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://application.cubix.localhost:8080/frontface/call
+  body: json
+  auth: none
+}
+
+auth:basic {
+  username: 
+  password: 
+}
+
+auth:bearer {
+  token: 
+}
+
+body:json {
+  {
+      "message": "Example message",
+      "token": "REPLACEME"
+  }
+}

@@ -1,0 +1,24 @@
+meta {
+  name: GET Call
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://application.cubix.localhost:8080/frontface/call?message=Example message
+  body: none
+  auth: none
+}
+
+query {
+  message: Example message
+}
+
+auth:basic {
+  username: 
+  password: 
+}
+
+auth:bearer {
+  token: 
+}
