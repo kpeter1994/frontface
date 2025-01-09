@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
-      # Minden más branch esetén is fut:
-      - '**'
+      - 'feature*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       # Repository klónozása
