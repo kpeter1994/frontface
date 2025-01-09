@@ -36,7 +36,7 @@ jobs:
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/frontface-app
           TAG=$(if [ "${{ github.ref_name }}" == "main" ]; then echo "latest"; else echo "snapshot"; fi)
-          docker build -t $IMAGE_NAME:$TAG .
+          docker build -f local-env/Dockerfile -t $IMAGE_NAME:$TAG .
 
       # Docker image push
       - name: Push Docker Image
