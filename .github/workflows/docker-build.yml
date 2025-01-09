@@ -1,0 +1,46 @@
+name: CI - Docker Build
+
+on:
+  push:
+    branches:
+      - main
+      # Minden más branch esetén is fut:
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Repository klónozása
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Java és Maven beállítása
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # Maven build
+      - name: Build JAR
+        run: mvn clean package
+
+      # Docker login a GitHub Container Registry-hez (ghcr.io)
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Docker image építése
+      - name: Build Docker Image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/frontface-app
+          TAG=$(if [ "${{ github.ref_name }}" == "main" ]; then echo "latest"; else echo "snapshot"; fi)
+          docker build -t $IMAGE_NAME:$TAG .
+
+      # Docker image push
+      - name: Push Docker Image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/frontface-app
+          TAG=$(if [ "${{ github.ref_name }}" == "main" ]; then echo "latest"; else echo "snapshot"; fi)
+          docker push $IMAGE_NAME:$TAG
