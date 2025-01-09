@@ -1,0 +1,21 @@
+services:
+  background:
+    image: quay.io/drsylent/cubix/exam/background:springboot3
+    container_name: background
+    environment:
+      - BACKGROUND_TOKEN=secret_token
+    expose:
+      - "8080"
+
+  frontface:
+    build:
+      context: ..
+    container_name: frontface
+    environment:
+      - BACKGROUND_URL=http://background:8080
+      - FRONTFACE_TOKEN=secret_token
+
+    ports:
+      - "8081:8080"
+    depends_on:
+      - background
